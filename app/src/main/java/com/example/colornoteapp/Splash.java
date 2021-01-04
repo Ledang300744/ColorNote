@@ -24,38 +24,32 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         fAuth = FirebaseAuth.getInstance();
-
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                // check if user is logged in 
+                // Kiểm tra nếu user đăng nhập
                 if(fAuth.getCurrentUser() != null){
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                     finish();
                 }else {
-                    // create new anonymous account 
+                    // tạo tài khoản ẩn danh
                     fAuth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(Splash.this, "Logged in With Temporary Account.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Splash.this, "Đăng nhập bằng Tài khoản Tạm thời.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Splash.this, "Error ! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Splash.this, "Lỗi" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     });
                 }
-
-
-
-
             }
         },2000);
     }

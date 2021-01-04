@@ -26,24 +26,17 @@ public class NoteDetails extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         data = getIntent();
-
-
         TextView content = findViewById(R.id.noteDetailsContent);
         TextView title = findViewById(R.id.noteDetailsTitle);
         content.setMovementMethod(new ScrollingMovementMethod());
-
         content.setText(data.getStringExtra("content"));
         title.setText(data.getStringExtra("title"));
         content.setBackgroundColor(getResources().getColor(data.getIntExtra("code",0),null));
-
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i = new Intent(view.getContext(),EditNote.class);
                 i.putExtra("title",data.getStringExtra("title"));
                 i.putExtra("content",data.getStringExtra("content"));

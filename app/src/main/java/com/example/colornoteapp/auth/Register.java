@@ -36,18 +36,16 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        getSupportActionBar().setTitle("Connect to FireNotes");
+        getSupportActionBar().setTitle("Kêt nối ColorNote");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         rUserName = findViewById(R.id.userName);
         rUserEmail = findViewById(R.id.userEmail);
         rUserPass = findViewById(R.id.password);
         rUserConfPass = findViewById(R.id.passwordConfirm);
-
         syncAccount = findViewById(R.id.createAccount);
         loginAct = findViewById(R.id.login);
         progressBar = findViewById(R.id.progressBar4);
-
         fAuth = FirebaseAuth.getInstance();
 
         loginAct.setOnClickListener(new View.OnClickListener() {
@@ -66,12 +64,12 @@ public class Register extends AppCompatActivity {
                 String uConfPass = rUserConfPass.getText().toString();
 
                 if(uUserEmail.isEmpty() || uUsername.isEmpty() || uUserPass.isEmpty() || uConfPass.isEmpty()){
-                    Toast.makeText(Register.this, "All Fields Are Required.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "Nhập toàn bộ trường bắt buộc", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if(!uUserPass.equals(uConfPass)){
-                    rUserConfPass.setError("Password Do not Match.");
+                    rUserConfPass.setError("Mật khẩu không khớp");
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
@@ -80,7 +78,7 @@ public class Register extends AppCompatActivity {
                 fAuth.getCurrentUser().linkWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(Register.this, "Notes are Synced.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, "Note được đồng bộ hóa", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
                         FirebaseUser usr = fAuth.getCurrentUser();
@@ -97,19 +95,13 @@ public class Register extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(Register.this, "Failed to Connect. Try Again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, "Kết nối thất bại. Thử lại", Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.VISIBLE);
                     }
                 });
 
             }
         });
-
-
-
-
-
-
     }
 
 

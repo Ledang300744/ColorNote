@@ -45,8 +45,6 @@ public class AddNote extends AppCompatActivity {
         progressBarSave = findViewById(R.id.progressBar);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,13 +53,12 @@ public class AddNote extends AppCompatActivity {
                 String nContent = noteContent.getText().toString();
 
                 if(nTitle.isEmpty() || nContent.isEmpty()){
-                    Toast.makeText(AddNote.this, "Can not Save note with Empty Field.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNote.this, "Không thể Lưu ghi chú với note trống", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 progressBarSave.setVisibility(View.VISIBLE);
 
-                // save note
+                // lưu note
 
                 DocumentReference docref = fStore.collection("notes").document(user.getUid()).collection("myNotes").document();
                 Map<String,Object> note = new HashMap<>();
@@ -70,18 +67,16 @@ public class AddNote extends AppCompatActivity {
                 docref.set(note).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(AddNote.this, "Note Added.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNote.this, "Thêm note", Toast.LENGTH_SHORT).show();
                         onBackPressed();
-
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddNote.this, "Error, Try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNote.this, "Lỗi ,thử lại.", Toast.LENGTH_SHORT).show();
                         progressBarSave.setVisibility(View.VISIBLE);
                     }
                 });
-
             }
         });
     }
@@ -92,11 +87,10 @@ public class AddNote extends AppCompatActivity {
         inflater.inflate(R.menu.close_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.close){
-            Toast.makeText(this,"Not Saved.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"không thể lưu.", Toast.LENGTH_SHORT).show();
             onBackPressed();
 
         }

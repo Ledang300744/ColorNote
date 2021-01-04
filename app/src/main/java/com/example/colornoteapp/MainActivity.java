@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirestoreRecyclerAdapter<Note,NoteViewHolder> noteAdapter;
     FirebaseUser user;
     FirebaseAuth fAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,15 +68,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
 
-
         Query query = fStore.collection("notes").document(user.getUid()).collection("myNotes").orderBy("title", Query.Direction.DESCENDING);
-        // query notes > uuid > mynotes
 
         FirestoreRecyclerOptions<Note> allNotes = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query,Note.class)
                 .build();
-
-
         noteAdapter = new FirestoreRecyclerAdapter<Note, NoteViewHolder>(allNotes) {
             @Override
             protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, final int i, @NonNull final Note note) {
@@ -98,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         v.getContext().startActivity(i);
                     }
                 });
-
                 ImageView menuIcon = noteViewHolder.view.findViewById(R.id.menuIcon);
                 menuIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -117,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 return false;
                             }
                         });
-
                         menu.getMenu().add("Delete").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
@@ -130,20 +123,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(MainActivity.this, "Error in Deleting Note.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, "Lỗi khi xóa ghi chú", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                                 return false;
                             }
                         });
-
                         menu.show();
-
                     }
                 });
-
-
-
             }
 
             @NonNull
@@ -153,9 +141,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return new NoteViewHolder(view);
             }
         };
-
-
-
         noteLists = findViewById(R.id.notelist);
         drawerLayout = findViewById(R.id.drawer);
         nav_view = findViewById(R.id.nav_view);
@@ -165,24 +150,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
-
         noteLists.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         noteLists.setAdapter(noteAdapter);
-
         View headerView = nav_view.getHeaderView(0);
         TextView username = headerView.findViewById(R.id.userDisplayName);
         TextView userEmail = headerView.findViewById(R.id.userDisplayEmail);
-
         if(user.isAnonymous()){
             userEmail.setVisibility(View.GONE);
-            username.setText("Temporary User");
+            username.setText("Người dùng tạm thời");
         }else {
             userEmail.setText(user.getEmail());
             username.setText(user.getDisplayName());
         }
-
-
-
         FloatingActionButton fab = findViewById(R.id.addNoteFloat);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,20 +188,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(new Intent(this, Login.class));
                     overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
                 }else {
-                    Toast.makeText(this, "Your Are Connected.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Bạn được kết nối.", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             case R.id.logout:
                 checkUser();
                 break;
-
             default:
-                Toast.makeText(this, "Coming soon.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Xin chờ", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
-
     private void checkUser() {
         // if user is real or not
         if(user.isAnonymous()){
@@ -236,21 +213,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void displayAlert() {
         AlertDialog.Builder warning = new AlertDialog.Builder(this)
-                .setTitle("Are you sure ?")
-                .setMessage("You are logged in with Temporary Account. Logging out will Delete All the notes.")
-                .setPositiveButton("Sync Note", new DialogInterface.OnClickListener() {
+                .setTitle("Xác nhận")
+                .setMessage("Bạn đã đăng nhập bằng Tài khoản tạm thời. Đăng xuất sẽ xóa tất cả các ghi chú.")
+                .setPositiveButton("Đồng bộ", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(getApplicationContext(),Register.class));
                         finish();
                     }
-                }).setNegativeButton("Logout", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("Đăng xuất", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // ToDO: delete all the notes created by the Anon user
-
-                        // TODO: delete the anon user
-
                         user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -260,25 +233,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         });
                     }
                 });
-
         warning.show();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.settings){
-            Toast.makeText(this, "Settings Menu is Clicked.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Cài đặt", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
-
     public class NoteViewHolder extends RecyclerView.ViewHolder{
         TextView noteTitle,noteContent;
         View view;
@@ -295,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private int getRandomColor() {
-
         List<Integer> colorCode = new ArrayList<>();
         colorCode.add(R.color.blue);
         colorCode.add(R.color.yellow);
@@ -311,15 +279,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Random randomColor = new Random();
         int number = randomColor.nextInt(colorCode.size());
         return colorCode.get(number);
-
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         noteAdapter.startListening();
     }
-
     @Override
     protected void onStop() {
         super.onStop();

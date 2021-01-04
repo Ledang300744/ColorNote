@@ -31,14 +31,12 @@ public class EditNote extends AppCompatActivity {
     FirebaseFirestore fStore;
     ProgressBar spinner;
     FirebaseUser user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         fStore = fStore.getInstance();
         spinner = findViewById(R.id.progressBar2);
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -47,7 +45,6 @@ public class EditNote extends AppCompatActivity {
 
         editNoteContent = findViewById(R.id.editNoteContent);
         editNoteTitle = findViewById(R.id.editNoteTitle);
-
 
         String noteTitle = data.getStringExtra("title");
         String noteContent = data.getStringExtra("content");
@@ -59,18 +56,17 @@ public class EditNote extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String nTitle = editNoteTitle.getText().toString();
                 String nContent = editNoteContent.getText().toString();
 
                 if(nTitle.isEmpty() || nContent.isEmpty()){
-                    Toast.makeText(EditNote.this, "Can not Save note with Empty Field.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditNote.this, "Không thể Lưu ghi chú với trường trống.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 spinner.setVisibility(View.VISIBLE);
 
-                // save note
+                // Lưu note
 
                 DocumentReference docref = fStore.collection("notes").document(user.getUid()).collection("myNotes").document(data.getStringExtra("noteId"));
 
@@ -81,14 +77,14 @@ public class EditNote extends AppCompatActivity {
                 docref.update(note).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(EditNote.this, "Note Saved.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditNote.this, "Lưu note.", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(EditNote.this, "Error, Try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditNote.this, "Lỗi, thử lại", Toast.LENGTH_SHORT).show();
                         spinner.setVisibility(View.VISIBLE);
                     }
                 });
@@ -96,7 +92,7 @@ public class EditNote extends AppCompatActivity {
 
             }
         });
-        
+
 
     }
 }

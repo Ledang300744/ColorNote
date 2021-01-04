@@ -25,14 +25,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         this.titles = title;
         this.content = content;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_view_layout,parent,false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.noteTitle.setText(titles.get(position));
@@ -51,32 +49,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             }
         });
     }
-
     private int getRandomColor() {
 
         List<Integer> colorCode = new ArrayList<>();
         colorCode.add(R.color.blue);
         colorCode.add(R.color.yellow);
         colorCode.add(R.color.skyblue);
-        colorCode.add(R.color.lightPurple);
-        colorCode.add(R.color.lightGreen);
-        colorCode.add(R.color.gray);
-        colorCode.add(R.color.pink);
-        colorCode.add(R.color.red);
-        colorCode.add(R.color.greenlight);
-        colorCode.add(R.color.notgreen);
+
 
         Random randomColor = new Random();
         int number = randomColor.nextInt(colorCode.size());
         return colorCode.get(number);
 
     }
-
     @Override
     public int getItemCount() {
         return titles.size();
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView noteTitle,noteContent;
         View view;
